@@ -177,10 +177,22 @@ exports.getAllRepos = (req, res, next) => {
     const collection = db.collection('data');
 
     // Find some documents
-    collection.find({}).project({ 'repo.id': 1, 'actor.login': 1, 'type': 1 }).toArray(function (err, docs) {
+    collection.aggregate([
+      {
+        $group: {
+          _id: "$repo.id",
+          Actors: {
+            $push: {
+              "login": "$actor.login"
+            }
+          }
+        }
+      }
+    ]).toArray(function (err, docs) {
       assert.equal(err, null);
       console.log("Found the following records");
-      res.status(200).json({ docs });
+
+      res.status(200).json({docs});
       callback(docs);
     });
   }
@@ -222,7 +234,7 @@ exports.deleteByActorLogin = (req, res, next) => {
     const collection = db.collection('data');
 
     // Find some documents
-    collection.deleteMany({'actor.login':actorLogin}, function(err, r) {
+    collection.deleteMany({ 'actor.login': actorLogin }, function (err, r) {
       assert.equal(null, err);
       assert.equal(2, r.deletedCount);
       client.close();
