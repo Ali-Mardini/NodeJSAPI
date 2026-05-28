@@ -15,8 +15,8 @@
   "author": "Ali Mardini",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.4",
-    "express": "^4.22.1",
+    "body-parser": "^1.20.5",
+    "express": "^4.22.2",
     "mongodb": "^3.5.5"
   },
   "devDependencies": {
